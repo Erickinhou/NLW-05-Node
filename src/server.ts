@@ -1,5 +1,6 @@
 import { http } from "./http";
 import "./websocket/client";
+import "./websocket/admin";
 /* 
   We need to use socket, and set the connections before the listen, to send
   the initial http socket response, so one good way to separate the files is 

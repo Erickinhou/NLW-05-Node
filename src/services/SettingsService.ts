@@ -24,6 +24,7 @@ class SettingsService {
     }
 
     const settings = this.settingsRepository.create({
+      //here I have more data in settings object
       chat,
       username
     });
