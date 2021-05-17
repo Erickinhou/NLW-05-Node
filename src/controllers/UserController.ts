@@ -6,7 +6,6 @@ class UsersController {
     const { email } = req.body;
 
     const usersService = new UsersService();
-    usersService.log();
 
     const user = await usersService.create({ email });
     return res.json(user);
