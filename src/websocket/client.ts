@@ -14,8 +14,6 @@ io.on("connect", (socket) => {
 
     let user_id: string;
 
-    console.log(userExists);
-
     if (!userExists) {
       const user = await usersService.create(email);
       user_id = user.id;
@@ -38,7 +36,7 @@ io.on("connect", (socket) => {
     } else {
       connection.socket_id = socket_id;
 
-      await connectionService.create(connection);
+      await connectionService.create(connection); //this keeps the last socket saved
     }
 
     await messagesService.create({ text, user_id });
@@ -46,4 +44,27 @@ io.on("connect", (socket) => {
 
     socket.emit("client_list_all_messages", allMessages);
   });
+
+  socket.on("client_send_to_admin", async (params)=>{
+    
+    const socket_id = socket.id;
+
+    console.log('params', params);
+
+    const {text, socket_admin_id} = params
+    
+
+    const connection = await connectionService.findBySocketId({socket_id});
+    
+    const message = await messagesService.create({
+      text,
+      user_id: connection.user_id
+    })
+    
+    io.to(socket_admin_id).emit("admin_receive_message", {
+      message,
+      socket_id,
+      connection
+    });
+  })
 });

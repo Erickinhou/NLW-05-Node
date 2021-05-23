@@ -98,6 +98,7 @@
   <script>
     onLoad();
     const chat = document.getElementById("chat_help");
+    const btnSupport = document.getElementById("btn_support");
 
     function onLoad() {
       // fetch("http://localhost:3333/settings/admin").then((result) =>
@@ -112,6 +113,7 @@
 
     function openChat() {
       chat.style.display = "block";
+      btnSupport.style.display = "none";
     }
 
     function closeChat() {

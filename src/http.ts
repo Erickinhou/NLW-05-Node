@@ -23,9 +23,6 @@ app.get("/pages/admin", (req, res) => {
 const http = createServer(app); //Create http protocol
 const io = new Server(http); //Create socket protocol ws
 
-io.on("connection", (socket: Socket) => {
-  console.log(`Connected with id: ${socket.id}`);
-});
 
 app.use(express.json());
 app.use(routes);

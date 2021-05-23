@@ -150,6 +150,7 @@ body {
   justify-content: space-between;
   border: 1px solid #cec9c9;
   align-items: center;
+  z-index: 10;
 }
 
 .message_send input {

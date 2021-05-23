@@ -19,7 +19,7 @@ document.querySelector("#start_chat").addEventListener("click", (event) => {
   socket.on("connect", () => {
     const params = {
       email,
-      text
+      text,
     };
     socket.emit("client_first_access", params, (call, err) => {
       if (err) {
@@ -31,22 +31,21 @@ document.querySelector("#start_chat").addEventListener("click", (event) => {
   });
 
   socket.on("client_list_all_messages", (messages) => {
-    var template_client = document.getElementById(
-      "message-user-template"
-    ).innerHTML;
+    var template_client = document.getElementById("message-user-template")
+      .innerHTML;
     var template_admin = document.getElementById("admin-template").innerHTML;
 
     messages.forEach((message) => {
       if (message.admin_id === null) {
         const rendered = Mustache.render(template_client, {
           message: message.text,
-          email
+          email,
         });
 
         document.getElementById("messages").innerHTML += rendered;
       } else {
         const rendered = Mustache.render(template_admin, {
-          message_admin: message.text
+          message_admin: message.text,
         });
 
         document.getElementById("messages").innerHTML += rendered;
@@ -60,7 +59,7 @@ document.querySelector("#start_chat").addEventListener("click", (event) => {
     const template_admin = document.getElementById("admin-template").innerHTML;
 
     const rendered = Mustache.render(template_admin, {
-      message_admin: message.text
+      message_admin: message.text,
     });
 
     document.getElementById("messages").innerHTML += rendered;
@@ -74,18 +73,17 @@ document
 
     const params = {
       text: text.value,
-      socket_admin_id
+      socket_admin_id,
     };
 
     socket.emit("client_send_to_admin", params);
 
-    const template_client = document.getElementById(
-      "message-user-template"
-    ).innerHTML;
+    const template_client = document.getElementById("message-user-template")
+      .innerHTML;
 
     const rendered = Mustache.render(template_client, {
       message: text.value,
-      email: emailUser
+      email: emailUser,
     });
 
     document.getElementById("messages").innerHTML += rendered;

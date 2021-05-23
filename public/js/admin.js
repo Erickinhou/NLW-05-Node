@@ -3,6 +3,8 @@ let connectionsUsers = [];
 let connectionInSupport = []; //Cria uma variavel para armazenar os atendimentos
 
 socket.on("admin_list_all_users", (connections) => {
+
+  console.log('socket_id in front',socket.id);
   connectionsUsers = connections;
   document.getElementById("list_users").innerHTML = "";
 
@@ -11,7 +13,7 @@ socket.on("admin_list_all_users", (connections) => {
   connections.forEach((connection) => {
     const rendered = Mustache.render(template, {
       email: connection.user.email,
-      id: connection.socket_id
+      id: connection.socket_id,
     });
 
     document.getElementById("list_users").innerHTML += rendered;
@@ -20,7 +22,7 @@ socket.on("admin_list_all_users", (connections) => {
 
 function call(id) {
   const connection = connectionsUsers.find(
-    (connection) => connection.socket_id === id //get the actual clicked connection
+    (connection) => connection.socket_id === id
   );
 
   connectionInSupport.push(connection); //Quando encontrar a conexao, coloca dentro do array de atendimentos
@@ -29,13 +31,13 @@ function call(id) {
 
   const rendered = Mustache.render(template, {
     email: connection.user.email,
-    id: connection.user_id
+    id: connection.user_id,
   });
 
   document.getElementById("supports").innerHTML += rendered;
 
   const params = {
-    user_id: connection.user_id
+    user_id: connection.user_id,
   };
 
   socket.emit("admin_user_in_support", params);
@@ -75,7 +77,7 @@ function sendMessage(id) {
 
   const params = {
     text: text.value,
-    user_id: id
+    user_id: id,
   };
 
   socket.emit("admin_send_message", params);
@@ -95,18 +97,20 @@ function sendMessage(id) {
 }
 
 socket.on("admin_receive_message", (data) => {
+  console.log('is hitting here?????');
   const connection = connectionInSupport.find(
     (connection) => connection.socket_id === data.socket_id
   ); //Aqui utiliza o array de atendimento que foi inserido acima
 
   const divMessages = document.getElementById(
-    `allMessages${connection.user_id}`
+    `allMessages${data.connection.user_id}`
   );
+  console.log('data --> ',data);  
 
   const createDiv = document.createElement("div");
 
   createDiv.className = "admin_message_client";
-  createDiv.innerHTML = `<span>${connection.user.email} </span>`;
+  createDiv.innerHTML = `<span>${data.connection.user.email} </span>`;
   createDiv.innerHTML += `<span>${data.message.text}</span>`;
   createDiv.innerHTML += `<span class="admin_date">${dayjs(
     data.message.created_at
